@@ -11,18 +11,27 @@ async function getAnimeInfo(animeName) {
 }
 
 async function handleAnimeCommand(sock, message) {
-  const animeName = message.message.conversation.split(' ')[1]; // Extract anime name from the command
   try {
-    const animeInfo = await getAnimeInfo(animeName);
+    const parts = message.message.conversation.split(' ');
 
+    // Check if an anime name is provided
+    if (parts.length < 2) {
+      await sock.sendMessage(message.key.remoteJid, { text: 'Please provide an anime name after the command.' });
+      return;
+    }
+    
+    const animeName = parts.slice(1).join(' '); // Join the parts back into the anime name
+    const animeInfo = await getAnimeInfo(animeName); // Fetch the anime information
+
+    // Check if the anime information is available
     if (animeInfo) {
       const responseText = `
-        Title: ${animeInfo.title}
-        Synopsis: ${animeInfo.synopsis}
-        Score: ${animeInfo.score}
-        Episodes: ${animeInfo.episodes}
-        Status: ${animeInfo.status}
-        Image: ${animeInfo.images.jpg.image_url}
+        **Title:** ${animeInfo.title}
+        **Episodes:** ${animeInfo.episodes}
+        **Score:** ${animeInfo.score}
+        **Status:** ${animeInfo.status}
+        **Synopsis:** ${animeInfo.Synopsis}
+        **Image:** ${animeInfo.images.jpg.image_url}
       `;
       await sock.sendMessage(message.key.remoteJid, { text: responseText });
     } else {
@@ -30,11 +39,8 @@ async function handleAnimeCommand(sock, message) {
     }
   } catch (error) {
     console.error('Error handling anime command:', error);
-    await sock.sendMessage(message.key.remoteJid, { text: 'An error occurred while processing your request.' });
+    await sock.sendMessage(message.key.remoteJid, { text: 'An error occurred while processing your request. Please try again later.' });
   }
 }
-
-// Export the handleAnimeCommand function
-
 
 module.exports = { handleAnimeCommand };
