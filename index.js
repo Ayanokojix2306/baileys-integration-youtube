@@ -47,8 +47,15 @@ async function connectionLogic() {
     const message = messageInfo.messages[0];
     if (message.key.fromMe || !message.message) return;
 
+    // Message event handler to respond to messages
+ 
+
     const text = message.message.conversation || '';
-    if (text.toLowerCase() === 'hi' || text.toLowerCase() === 'hello') {
+
+    // Check for the anime command
+    if (text.toLowerCase().startsWith('.anime')) {
+      await handleAnimeCommand(sock, message); // Call the anime command handler
+    } else if (text.toLowerCase() === 'hi' || text.toLowerCase() === 'hello') {
       await sock.sendMessage(message.key.remoteJid, { text: 'Hello there! 👋' });
     }
   });
