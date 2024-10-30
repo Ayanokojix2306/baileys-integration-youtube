@@ -53,7 +53,11 @@ async function connectionLogic() {
     const text = message.message.conversation || '';
 
     // Check for the anime command
-    if (text.toLowerCase().startsWith('.anime')) {
+        // Regular expression to match various command formats (.,!, etc.) followed by "anime"
+    const commandRegex = /^[.,!]?anime$/i;
+
+    // If the message matches the command format, call the handler
+    if (commandRegex.test(text)) {
       await handleAnimeCommand(sock, message); // Call the anime command handler
     } else if (text.toLowerCase() === 'hi' || text.toLowerCase() === 'hello') {
       await sock.sendMessage(message.key.remoteJid, { text: 'Hello there! 👋' });
