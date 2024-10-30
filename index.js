@@ -30,7 +30,10 @@ async function connectionLogic() {
   sock.ev.on('connection.update', async (update) => {
     const { qr, connection, lastDisconnect } = update;
     if (qr) {
-      qrCodeData = await QRCode.toDataURL(qr); // Convert to a data URL for display
+      qrCodeData = await QRCode.toDataURL(qr); 
+      // Convert to a data URL for display
+      console.log("qr code sent successfully ✅");
+      console.log(JSON.stringify(qrCodeData)); // Add this line to log the QR code dat
     }
 
     if (connection === 'close' && lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut) {
