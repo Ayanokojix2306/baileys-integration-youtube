@@ -2,6 +2,7 @@ const express = require('express');
 const makeWASocket = require('@whiskeysockets/baileys').default;
 const { MongoClient } = require('mongodb');
 const useMongoDBAuthState = require('./mongoAuthState');
+const { DisconnectReason } = require('@whiskeysockets/baileys'); // Add this line
 const QRCode = require('qrcode');
 
 const app = express();
