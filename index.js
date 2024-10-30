@@ -1,11 +1,12 @@
-const {
-  DisconnectReason,
-  useMultiFileAuthState,
-} = require("@whiskeysockets/baileys");
-const useMongoDBAuthState = require("./mongoAuthState");
-const makeWASocket = require("@whiskeysockets/baileys").default;
-const mongoURL = "mongodb+srv://Saif:Arhaan123@cluster0.mj6hd.mongodb.net";
-const { MongoClient } = require("mongodb");
+const express = require('express');
+const makeWASocket = require('@whiskeysockets/baileys').default;
+const { MongoClient } = require('mongodb');
+const useMongoDBAuthState = require('./mongoAuthState');
+const QRCode = require('qrcode');
+
+const app = express();
+const port = process.env.PORT || 10000;
+const mongoURL = process.env.MONGODB_URI || 'mongodb+srv://Saif:Arhaan123@cluster0.mj6hd.mongodb.net';
 
 async function connectionLogic() {
   const mongoClient = new MongoClient(mongoURL, {
@@ -13,44 +14,52 @@ async function connectionLogic() {
     useUnifiedTopology: true,
   });
   await mongoClient.connect();
-  // const { state, saveCreds } = await useMultiFileAuthState("auth_info_baileys");
-  const collection = mongoClient
-    .db("whatsapp_api")
-    .collection("auth_info_baileys");
+  const collection = mongoClient.db('whatsapp_api').collection('auth_info_baileys');
   const { state, saveCreds } = await useMongoDBAuthState(collection);
+
   const sock = makeWASocket({
-    // can provide additional config here
-    printQRInTerminal: true,
     auth: state,
   });
 
-  sock.ev.on("connection.update", async (update) => {
-    const { connection, lastDisconnect, qr } = update || {};
+  let qrCodeData = '';
 
+  // Handle QR Code generation
+  sock.ev.on('connection.update', async (update) => {
+    const { qr, connection, lastDisconnect } = update;
     if (qr) {
-      console.log(qr);
-      // write custom logic over here
+      qrCodeData = await QRCode.toDataURL(qr); // Convert to a data URL for display
     }
 
-    if (connection === "close") {
-      const shouldReconnect =
-        lastDisconnect?.error?.output?.statusCode !==
-        DisconnectReason.loggedOut;
-
-      if (shouldReconnect) {
-        connectionLogic();
-      }
+    if (connection === 'close' && lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut) {
+      connectionLogic(); // Reconnect if not logged out
     }
   });
 
-  sock.ev.on("messages.update", (messageInfo) => {
-    console.log(messageInfo);
+  // Message event handler to respond to "hi" or "hello"
+  sock.ev.on('messages.upsert', async (messageInfo) => {
+    const message = messageInfo.messages[0];
+    if (message.key.fromMe || !message.message) return;
+
+    const text = message.message.conversation || '';
+    if (text.toLowerCase() === 'hi' || text.toLowerCase() === 'hello') {
+      await sock.sendMessage(message.key.remoteJid, { text: 'Hello there! 👋' });
+    }
   });
 
-  sock.ev.on("messages.upsert", (messageInfoUpsert) => {
-    console.log(messageInfoUpsert);
-  });
-  sock.ev.on("creds.update", saveCreds);
+  sock.ev.on('creds.update', saveCreds);
 }
 
 connectionLogic();
+
+// Serve the QR code at the root URL
+app.get('/', (req, res) => {
+  if (qrCodeData) {
+    res.send(`<h2>Scan the QR Code below with WhatsApp:</h2><img src="${qrCodeData}" />`);
+  } else {
+    res.send('<h2>QR Code not generated yet. Please wait...</h2>');
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
