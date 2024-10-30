@@ -8,11 +8,15 @@ const app = express();
 const port = process.env.PORT || 10000;
 const mongoURL = process.env.MONGODB_URI || 'mongodb+srv://Saif:Arhaan123@cluster0.mj6hd.mongodb.net';
 
+// Declare qrCodeData in a higher scope
+let qrCodeData = '';
+
 async function connectionLogic() {
   const mongoClient = new MongoClient(mongoURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
+  
   await mongoClient.connect();
   const collection = mongoClient.db('whatsapp_api').collection('auth_info_baileys');
   const { state, saveCreds } = await useMongoDBAuthState(collection);
@@ -20,8 +24,6 @@ async function connectionLogic() {
   const sock = makeWASocket({
     auth: state,
   });
-
-  let qrCodeData = '';
 
   // Handle QR Code generation
   sock.ev.on('connection.update', async (update) => {
