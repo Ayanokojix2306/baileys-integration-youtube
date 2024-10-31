@@ -5,6 +5,7 @@ const useMongoDBAuthState = require('./mongoAuthState');
 const { DisconnectReason } = require('@whiskeysockets/baileys'); // Add this line
 const QRCode = require('qrcode');
 const { handleAnimeCommand } = require('./commands/anime'); // Import the anime command
+const { handlePingCommand } = require('./commands/ping'); // Import the ping command
 
 const app = express();
 const port = process.env.PORT || 10000;
