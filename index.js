@@ -62,13 +62,15 @@ async function connectionLogic() {
 
   // Check for the anime command
   const commandRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
-  if (commandRegex.test(text)) {
+if (commandRegex.test(text)) {
     await handleAnimeCommand(sock, message);
     return; // Return after handling anime command
-  }// Call the anime command handler
-    } else if (text.toLowerCase() === 'hi' || text.toLowerCase() === 'hello') {
-      await sock.sendMessage(message.key.remoteJid, { text: 'You wanna buy a bot!? 👋' });
-    }
+} // This closing brace is correct
+
+// Check for greeting messages
+if (text.toLowerCase() === 'hi' || text.toLowerCase() === 'hello') {
+    await sock.sendMessage(message.key.remoteJid, { text: 'You wanna buy a bot!? 👋' });
+}
   });
 
   sock.ev.on('creds.update', saveCreds);
