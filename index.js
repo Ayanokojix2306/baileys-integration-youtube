@@ -54,8 +54,7 @@ async function connectionLogic() {
 
     // Check for the anime command
         // Regular expression to match various command formats (.,!, etc.) followed by "anime"
-    const commandRegex = /^[.,!]?anime$/i;
-
+    const commandRegex = /^[.,!]?\s*anime\b/i;
     // If the message matches the command format, call the handler
     if (commandRegex.test(text)) {
       await handleAnimeCommand(sock, message); // Call the anime command handler
