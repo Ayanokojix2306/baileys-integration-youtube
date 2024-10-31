@@ -24,3 +24,4 @@ async function handleForwardCommand(sock, message) {
     await sock.sendMessage(message.key.remoteJid, { text: 'An error occurred while forwarding the message. Please try again later.' });
   }
 }
+module.exports = { handleForwardCommand };
