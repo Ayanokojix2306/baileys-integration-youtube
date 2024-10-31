@@ -6,6 +6,7 @@ const { DisconnectReason } = require('@whiskeysockets/baileys'); // Add this lin
 const QRCode = require('qrcode');
 const { handleAnimeCommand } = require('./commands/anime');// Import the anime command
 const { handleForwardCommand } = require('./commands/forward'); // Import the forward command
+const { handleViewOnceCommandNotForward } = require('./commands/vv'); // Import the view-once command
 
 const app = express();
 const port = process.env.PORT || 10000;
@@ -54,7 +55,7 @@ async function connectionLogic() {
     // Regex for commands
     const forwardRegex = /^[.,!]?\s*forward\b/i; // Regex for forward command
     const animeRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
-
+const vvRegex = /^[.,!]?\s*vv\b/i;
     // Check for the anime command
     if (animeRegex.test(text)) {
         await handleAnimeCommand(sock, message);
@@ -65,6 +66,10 @@ async function connectionLogic() {
     if (forwardRegex.test(text)) {
         await handleForwardCommand(sock, message);
         return; // Return after handling anime command
+    }
+    if (vvRegex.test(text)) {
+      await handleViewOnceCommandNotForward(sock, message);
+      return;
     }
 
     // Check for greeting messages
