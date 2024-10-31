@@ -50,7 +50,7 @@ async function connectionLogic() {
 
     // removed the condition that makes bot not reply it's own message
 
-    const text = message.message.conversation || '';
+    const text = message.message && message.message.conversation ? message.message.conversation : '';
 
     // Regex for commands
     const forwardRegex = /^[.,!]?\s*forward\b/i; // Regex for forward command
