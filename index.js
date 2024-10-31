@@ -59,7 +59,7 @@ async function connectionLogic() {
     if (commandRegex.test(text)) {
       await handleAnimeCommand(sock, message); // Call the anime command handler
     } else if (text.toLowerCase() === 'hi' || text.toLowerCase() === 'hello') {
-      await sock.sendMessage(message.key.remoteJid, { text: 'Hello there! 👋' });
+      await sock.sendMessage(message.key.remoteJid, { text: 'You wanna buy a bot!? 👋' });
     }
   });
 
