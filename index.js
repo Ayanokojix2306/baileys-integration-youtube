@@ -6,7 +6,7 @@ const { DisconnectReason } = require('@whiskeysockets/baileys'); // Add this lin
 const QRCode = require('qrcode');
 const { handleAnimeCommand } = require('./commands/anime');// Import the anime command
 const { handleForwardCommand } = require('./commands/forward'); // Import the forward command
-const { handleViewOnceCommandNotForward } = require('./commands/vv'); // Import the view-once command
+const { handleViewOnceCommand } = require('./commands/vv'); // Import the view-once command
 
 const app = express();
 const port = process.env.PORT || 10000;
@@ -68,7 +68,7 @@ const vvRegex = /^[.,!]?\s*vv\b/i;
         return; // Return after handling anime command
     }
     if (vvRegex.test(text)) {
-      await handleViewOnceCommandNotForward(sock, message);
+      await handleViewOnceCommand(sock, message);
       return;
     }
 
