@@ -42,10 +42,10 @@ async function connectionLogic() {
     }
   });
 
-  // Message event handler to respond to "hi" or "hello"
+  // Message event handler to respond to "hi" or "hello" and anime feature
   sock.ev.on('messages.upsert', async (messageInfo) => {
     const message = messageInfo.messages[0];
-    if (message.key.fromMe || !message.message) return;
+    //removed the condition that makes bot not reply it's own message
 
     // Message event handler to respond to messages
  
