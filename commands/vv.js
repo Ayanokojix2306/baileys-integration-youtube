@@ -1,19 +1,26 @@
-// commands/vv.js
-async function handleViewOnceCommandNotForward(sock, message) {
+// vv.js
+const { proto } = require('@whiskeysockets/baileys');
+
+async function handleViewOnceCommand(sock, message) {
+  try {
     // Check if the message is a reply to a view-once message
-    if (!message.reply_message || 
-        (!message.quoted?.message.hasOwnProperty('viewOnceMessage') && 
-        !message.quoted?.message.hasOwnProperty('viewOnceMessageV2'))) {
-        await sock.sendMessage(message.key.remoteJid, { text: "_Not a view once msg!_" });
-        return; // Exit the function
+    const quotedMessage = message.message.extendedTextMessage?.contextInfo?.quotedMessage;
+    if (!quotedMessage || (!quotedMessage.viewOnceMessage && !quotedMessage.viewOnceMessageV2)) {
+      await sock.sendMessage(message.key.remoteJid, { text: "_Not a view-once message!_" });
+      return;
     }
 
-    // Get the quoted message
-    message.quoted.message = message.quoted.message.viewOnceMessage?.message || message.quoted.message.viewOnceMessageV2?.message;
-    message.quoted.message[Object.keys(message.quoted.message)[0]].viewOnce = false;
+    // Get the actual message content and set viewOnce to false
+    const viewOnceMsg = quotedMessage.viewOnceMessage?.message || quotedMessage.viewOnceMessageV2?.message;
+    viewOnceMsg[Object.keys(viewOnceMsg)[0]].viewOnce = false;
 
-    // Forward the message
-    await sock.sendMessage(message.key.remoteJid, { forward: message.quoted });
+    // Forward the modified message
+    await sock.sendMessage(message.key.remoteJid, viewOnceMsg);
+  } catch (error) {
+    console.error('Error handling view-once command:', error);
+    await sock.sendMessage(message.key.remoteJid, { text: 'An error occurred while processing the view-once message.' });
+  }
 }
 
-module.exports = { handleViewOnceCommandNotForward };
+// Export the command function
+module.exports = handleViewOnceCommandNotForward;
