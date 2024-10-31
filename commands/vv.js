@@ -23,4 +23,4 @@ async function handleViewOnceCommand(sock, message) {
 }
 
 // Export the command function
-module.exports = handleViewOnceCommand;
+module.exports = { handleViewOnceCommand };
