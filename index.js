@@ -5,7 +5,6 @@ const useMongoDBAuthState = require('./mongoAuthState');
 const { DisconnectReason } = require('@whiskeysockets/baileys'); // Add this line
 const QRCode = require('qrcode');
 const { handleAnimeCommand } = require('./commands/anime'); // Import the anime command
-const { handlePingCommand } = require('./commands/ping'); // Import the ping command
 
 const app = express();
 const port = process.env.PORT || 10000;
@@ -52,13 +51,6 @@ async function connectionLogic() {
  
 
     const text = message.message.conversation || '';
-// Check for the ping command
-  // Check for the ping command
-  const pingRegex = /^[.,!]?ping\s/i; // Updated to include variations with punctuation
-  if (pingRegex.test(text)) {
-    await handlePingCommand(sock, message);
-   // return; // Return after handling ping
-  }
 
   // Check for the anime command
   const commandRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
