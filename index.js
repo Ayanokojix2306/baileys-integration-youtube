@@ -51,7 +51,10 @@ async function connectionLogic() {
  
 
     const text = message.message.conversation || '';
-
+// Check for the ping command
+  const pingRegex = /^[.,!]?ping\s/i; // Updated to include variations with punctuation
+  if (pingRegex.test(text)) {
+    await handlePingCommand(sock, message); // Call the ping command handler
     // Check for the anime command
         // Regular expression to match various command formats (.,!, etc.) followed by "anime"
     const commandRegex = /^[.,!]?\s*anime\b/i;
