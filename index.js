@@ -53,11 +53,17 @@ async function connectionLogic() {
 
     const text = message.message.conversation || '';
 
+    const forwardRegex = /^[.,!]?\s*forward\b/i; // Regex for forward command
+if (commandRegex.test(text)) {
+    await handleForwardCommand(sock, message);
+    return; // Return after handling forward command
+}
+
   // Check for the anime command
-  const commandRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
+  const forwardRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
 if (commandRegex.test(text)) {
     await handleAnimeCommand(sock, message);
-  //  return; // Return after handling anime command
+    return; // Return after handling anime command
 } // This closing brace is correct
 
 // Check for greeting messages
