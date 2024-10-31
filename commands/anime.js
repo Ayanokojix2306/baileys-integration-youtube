@@ -26,12 +26,15 @@ async function handleAnimeCommand(sock, message) {
     // Check if the anime information is available
     if (animeInfo) {
       const responseText = `
-        **Title:** ${animeInfo.title}
-        **Episodes:** ${animeInfo.episodes}
-        **Score:** ${animeInfo.score}
-        **Status:** ${animeInfo.status}
-        **Synopsis:** ${animeInfo.Synopsis}
-        **Image:** ${animeInfo.images.jpg.image_url}
+        **Title:** ${animeInfo.title || 'N/A'}
+        **Japanese title:**:${animeInfo.title_japanese || 'N/A'}
+        **Type**:${animeInfo.type || 'N/A'}
+        **Minutes per episode**:${animeInfo.duration|| 'N/A'}
+        **Episodes:** ${animeInfo.episodes || 'N/A'}
+        **Score:** ${animeInfo.score || 'N/A'}
+        **Status:** ${animeInfo.status || 'N/A'}
+        **Synopsis:** ${animeInfo.synopsis || 'N/A'}
+        **Image:** ${animeInfo.images?.jpg?.image_url || 'No image available'}
       `;
       await sock.sendMessage(message.key.remoteJid, { text: responseText });
     } else {
