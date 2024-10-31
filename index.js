@@ -7,6 +7,7 @@ const QRCode = require('qrcode');
 const { handleAnimeCommand } = require('./commands/anime');// Import the anime command
 const { handleForwardCommand } = require('./commands/forward'); // Import the forward command
 const { handleViewOnceCommand } = require('./commands/vv'); // Import the view-once command
+const { handleQuoteResponderCommand } = require('./commands/quoteResponder');
 
 const app = express();
 const port = process.env.PORT || 10000;
@@ -56,6 +57,7 @@ async function connectionLogic() {
     const forwardRegex = /^[.,!]?\s*forward\b/i; // Regex for forward command
     const animeRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
 const vvRegex = /^[.,!]?\s*vv\b/i;
+    const quoteResponderRegex = /^[.,!]?\s*quote\b/i;
     // Check for the anime command
     if (animeRegex.test(text)) {
         await handleAnimeCommand(sock, message);
@@ -70,6 +72,10 @@ const vvRegex = /^[.,!]?\s*vv\b/i;
     if (vvRegex.test(text)) {
       await handleViewOnceCommand(sock, message);
       return;
+    }
+    if (quoteResponderRegex.test(text)) {
+    await handleQuoteResponderCommand(sock, message);
+    return;
     }
 
     // Check for greeting messages
