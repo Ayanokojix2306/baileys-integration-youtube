@@ -46,31 +46,32 @@ async function connectionLogic() {
   // Message event handler to respond to "hi" or "hello" and anime feature
   sock.ev.on('messages.upsert', async (messageInfo) => {
     const message = messageInfo.messages[0];
-    //removed the condition that makes bot not reply it's own message
 
-    // Message event handler to respond to messages
- 
+    // removed the condition that makes bot not reply it's own message
 
     const text = message.message.conversation || '';
 
+    // Regex for commands
     const forwardRegex = /^[.,!]?\s*forward\b/i; // Regex for forward command
-if (commandRegex.test(text)) {
-    await handleForwardCommand(sock, message);
-    return; // Return after handling forward command
-}
+    const animeRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
 
-  // Check for the anime command
-  const forwardRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
-if (commandRegex.test(text)) {
-    await handleAnimeCommand(sock, message);
-    return; // Return after handling anime command
-} // This closing brace is correct
+    // Check for the anime command
+    if (animeRegex.test(text)) {
+        await handleAnimeCommand(sock, message);
+        return; // Return after handling forward command
+    }
 
-// Check for greeting messages
-if (text.toLowerCase() === 'hi' || text.toLowerCase() === 'hello') {
-    await sock.sendMessage(message.key.remoteJid, { text: 'You wanna buy a bot!? 👋' });
-}
-  });
+    // Check for the forward command
+    if (forwardRegex.test(text)) {
+        await handleForwardCommand(sock, message);
+        return; // Return after handling anime command
+    }
+
+    // Check for greeting messages
+    if (text.toLowerCase() === 'hi' || text.toLowerCase() === 'hello') {
+        await sock.sendMessage(message.key.remoteJid, { text: 'You wanna buy a bot!? 👋' });
+    }
+});
 
   sock.ev.on('creds.update', saveCreds);
 }
