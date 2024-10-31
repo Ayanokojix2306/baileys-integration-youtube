@@ -16,12 +16,17 @@ async function handleForwardCommand(sock, message) {
 
     const userJid = parts[1]; // Get the JID from the command
 
-    // Forward the original message to the specified JID
-    await sock.sendMessage(userJid, { forward: message.key }); // Forward the message using its key
-    await sock.sendMessage(message.key.remoteJid, { text: 'Message forwarded successfully!' });
+    // Check if the message is a reply
+    if (!message.message?.conversation && message.message?.extendedTextMessage?.contextInfo?.quotedMessage) {
+      const quotedMessageKey = message.message.extendedTextMessage.contextInfo.quotedMessage.key; // Get the key of the quoted message
+      await sock.sendMessage(userJid, { forward: quotedMessageKey }); // Forward the quoted message using its key
+      await sock.sendMessage(message.key.remoteJid, { text: 'Message forwarded successfully!' });
+    } else {
+      await sock.sendMessage(message.key.remoteJid, { text: 'Please reply to a message to forward it.' });
+    }
   } catch (error) {
     console.error('Error handling forward command:', error);
     await sock.sendMessage(message.key.remoteJid, { text: 'An error occurred while forwarding the message. Please try again later.' });
   }
 }
-module.exports = { handleForwardCommand };
+module.exports = {handleForwardCommand}
