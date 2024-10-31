@@ -36,7 +36,20 @@ async function handleAnimeCommand(sock, message) {
         **Synopsis:** ${animeInfo.synopsis || 'N/A'}
         **Image:** ${animeInfo.images?.jpg?.image_url || 'No image available'}
       `;
+      // Send the anime details as a text message
       await sock.sendMessage(message.key.remoteJid, { text: responseText });
+
+      // Attempt to send the image
+      try {
+        await sock.sendMessage(message.key.remoteJid, {
+          image: { url: animeInfo.images.jpg.image_url },
+          caption: 'Here is the anime image.'
+        });
+      } catch (imageError) {
+        console.error('Error sending anime image:', imageError);
+        await sock.sendMessage(message.key.remoteJid, { text: 'Image could not be sent. Please try again later.' });
+      }
+      
     } else {
       await sock.sendMessage(message.key.remoteJid, { text: 'Anime not found or an error occurred.' });
     }
@@ -45,5 +58,6 @@ async function handleAnimeCommand(sock, message) {
     await sock.sendMessage(message.key.remoteJid, { text: 'An error occurred while processing your request. Please try again later.' });
   }
 }
+
 
 module.exports = { handleAnimeCommand };
