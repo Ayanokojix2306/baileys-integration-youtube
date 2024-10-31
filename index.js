@@ -57,14 +57,14 @@ async function connectionLogic() {
   const pingRegex = /^[.,!]?ping\s/i; // Updated to include variations with punctuation
   if (pingRegex.test(text)) {
     await handlePingCommand(sock, message);
-    return; // Return after handling ping
+   // return; // Return after handling ping
   }
 
   // Check for the anime command
   const commandRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
 if (commandRegex.test(text)) {
     await handleAnimeCommand(sock, message);
-    return; // Return after handling anime command
+  //  return; // Return after handling anime command
 } // This closing brace is correct
 
 // Check for greeting messages
