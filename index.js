@@ -55,6 +55,8 @@ console.log("Received message:", JSON.stringify(message, null, 2)); // Log the m
                      message.message?.extendedTextMessage?.text ||
                      '';
     // Regex for commands
+const isQuoted = isQuotedMessage(message);
+    
     const forwardRegex = /^[.,!]?\s*forward\b/i; // Regex for forward command
     const animeRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
 const vvRegex = /^[.,!]?\s*vv\b/i;
