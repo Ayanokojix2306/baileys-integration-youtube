@@ -1,7 +1,7 @@
 const { isQuotedMessage, getQuotedInfo, replyToQuotedMessage } = require('../lib/quotedMessageHandler');
 
 // Main function to handle the quote responder command
-async function handleQuoteResponderCommand (sock, message) {
+async function handleQuoteResponderCommand(sock, message) {
   console.log("Handling quote responder command with message:", JSON.stringify(message, null, 2)); // Log here
   try {
     if (isQuotedMessage(message)) {
@@ -23,3 +23,4 @@ async function handleQuoteResponderCommand (sock, message) {
     await sock.sendMessage(message.key.remoteJid, { text: "An error occurred. Please try again later." });
   }
 }
+module.exports = { handleQuoteResponderCommand }
