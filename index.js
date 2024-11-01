@@ -51,8 +51,9 @@ async function connectionLogic() {
 console.log("Received message:", JSON.stringify(message, null, 2)); // Log the message structure
     // removed the condition that makes bot not reply it's own message
 
-    const text = message.message && message.message.conversation ? message.message.conversation : '';
-
+    const text = message.message?.conversation ||
+                     message.message?.extendedTextMessage?.text ||
+                     '';
     // Regex for commands
     const forwardRegex = /^[.,!]?\s*forward\b/i; // Regex for forward command
     const animeRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
