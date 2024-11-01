@@ -14,7 +14,7 @@ async function handleQuoteResponderCommand(sock, message) {
       await replyToQuotedMessage(sock, message, replyText);
     } else {
       // Inform user that no quoted message was detected
-      await sock.sendMessage(message.key.remoteJid, { text: "Please quote a message to use this command." });
+      await sock.sendMessage(message.key.remoteJid, { text: "Please quote a message to use this command,baka!" });
     }
   } catch (error) {
     console.error("Error handling quote responder command:", error);
