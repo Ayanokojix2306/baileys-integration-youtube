@@ -9,6 +9,9 @@ const { handleForwardCommand } = require('./commands/forward'); // Import the fo
 const { handleViewOnceCommand } = require('./commands/vv'); // Import the view-once command
 const { handleQuoteResponderCommand } = require('./commands/quoteResponder');
 const { isQuotedMessage } = require('./lib/quotedMessageHandler');
+const { handleObfuscateCommand } = require('./commands/obfuscate'); // Import obfuscate command
+const { handleDeobfuscateCommand } = require('./commands/deobfuscate'); // Import deobfuscate command
+
 
 const app = express();
 const port = process.env.PORT || 10000;
