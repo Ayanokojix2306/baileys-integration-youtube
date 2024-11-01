@@ -3,7 +3,7 @@ const JavaScriptObfuscator = require('javascript-obfuscator');
 async function handleObfuscateCommand(sock, message) {
   try {
     const text = message.message.conversation || '';
-    const code = text.replace(/^[.,!]?obfuscate\s*/i, '').trim(); // Remove the command keyword and trim spaces
+    const code = text.replace(/^[.,!]?encrypt\s*/i, '').trim(); // Remove the command keyword and trim spaces
 
     // Check if any code is provided
     if (!code) {
