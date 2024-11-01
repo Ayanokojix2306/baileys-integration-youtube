@@ -65,8 +65,8 @@ const isQuoted = isQuotedMessage(message);
     const animeRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
 const vvRegex = /^[.,!]?\s*vv\b/i;
     const quoteResponderRegex = /^[.,!]?\s*quote\b/i;
-   const obfuscateRegex = /^[.,!]?\s*obfuscate\b/i;
-const deobfuscateRegex = /^[.,!]?\s*deobfuscate\b/i;
+   const obfuscateRegex = /^[.,!]?\s*encrypt\b/i;
+const deobfuscateRegex = /^[.,!]?\s*decrypt\b/i;
     // Check for the obfuscate command
   if (obfuscateRegex.test(text)) {
     await handleObfuscateCommand(sock, message);
