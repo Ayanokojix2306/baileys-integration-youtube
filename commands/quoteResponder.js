@@ -6,6 +6,8 @@ async function handleQuoteResponderCommand(sock, message) {
   try {
     if (isQuotedMessage(message)) {
       const quotedInfo = getQuotedInfo(message);
+      // Log the quoted message details
+      console.log("Quoted Message:", message.message.extendedTextMessage.contextInfo.quotedMessage);
       
       // Customize the response based on the quoted message's full context
       const replyText = `Quoted Message Info:\nStanza ID: ${quotedInfo.stanzaId || 'N/A'}\nParticipant: ${quotedInfo.participant || 'N/A'}\nMessage: "${quotedInfo.quotedMessage?.conversation || 'No conversation text'}"`;
