@@ -4,7 +4,13 @@ const atob = require('atob');
 async function handleDeobfuscateCommand(sock, message) {
   try {
     const text = message.message.conversation || '';
-    const code = text.replace(/^[.,!]?deobfuscate\s*/i, ''); // Remove the command keyword
+    const code = text.replace(/^[.,!]?decrypt\s*/i, '').trim(); // Remove the command keyword and trim spaces
+
+    // Check if any code is provided
+    if (!code) {
+      await sock.sendMessage(message.key.remoteJid, { text: '❌ No code detected. Please provide the code you want to de-obfuscate after the command.' });
+      return;
+    }
 
     let decodedCode;
     try {
