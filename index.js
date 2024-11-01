@@ -8,6 +8,7 @@ const { handleAnimeCommand } = require('./commands/anime');// Import the anime c
 const { handleForwardCommand } = require('./commands/forward'); // Import the forward command
 const { handleViewOnceCommand } = require('./commands/vv'); // Import the view-once command
 const { handleQuoteResponderCommand } = require('./commands/quoteResponder');
+const { isQuotedMessage, getQuotedText, replyToQuotedMessage } = require('../lib/quotedMessageHandler');
 
 const app = express();
 const port = process.env.PORT || 10000;
