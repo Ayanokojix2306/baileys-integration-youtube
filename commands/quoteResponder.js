@@ -2,6 +2,7 @@ const { isQuotedMessage, getQuotedText, replyToQuotedMessage } = require('../lib
 
 // Main function to handle the quote responder command
 async function handleQuoteResponderCommand(sock, message) {
+  console.log("Handling quote responder command with message:", JSON.stringify(message, null, 2)); // Log here
   try {
     if (isQuotedMessage(message)) {
       const quotedText = getQuotedText(message);
