@@ -16,7 +16,7 @@ async function handleAnimeCommand(sock, message) {
 
     // Check if an anime name is provided
     if (parts.length < 2) {
-      await sock.sendMessage(message.key.remoteJid, { text: 'Please provide an anime name after the command.' });
+      await sock.sendMessage(message.key.remoteJid, { text: 'Please provide an anime name after the command. Example: .anime Naruto' });
       return;
     }
     
