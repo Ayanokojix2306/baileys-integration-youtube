@@ -52,11 +52,13 @@ console.log("Received message:", JSON.stringify(message, null, 2)); // Log the m
     const text = message.message?.conversation ||
                      message.message?.extendedTextMessage?.text ||
                      '';
+const isPrivateChat = message.key.remoteJid.endsWith('@s.whatsapp.net');
     // Regex for commands
 const isQuoted = isQuotedMessage(message);
     
 
     const animeRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
+    const greetingRegex = /^(hi|hello)\b/i; //regex for Hi and hello Shi
     // Check for the anime command
     if (animeRegex.test(text)) {
         await handleAnimeCommand(sock, message);
@@ -64,8 +66,8 @@ const isQuoted = isQuotedMessage(message);
     }
     
 
-    // Check for greeting messages
-    if (text.toLowerCase() === 'hi' || text.toLowerCase() === 'hello') {
+    // Check for greeting messages only in private chat
+    if (isPrivateChat && greetingRegex.test(text.toLowerCase())) {
         await sock.sendMessage(message.key.remoteJid, { text: 'You wanna buy a bot!? 👋' });
     }
 });
