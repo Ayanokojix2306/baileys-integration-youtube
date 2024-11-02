@@ -24,7 +24,7 @@ async function connectionLogic() {
   await mongoClient.connect();
   const collection = mongoClient.db('whatsapp_api').collection('auth_info_baileys');
   const { state, saveCreds } = await useMongoDBAuthState(collection);
-
+let restartMessageSent = false; // Flag to track if the restart message has been sent
   const sock = makeWASocket({
     auth: state,
   });
@@ -39,11 +39,13 @@ async function connectionLogic() {
       console.log(JSON.stringify(qrCodeData)); // Add this line to log the QR code dat
     }
     // Check if the connection is established
-    if (connection === 'open') {
+    if (connection === 'open'&& !restartMessageSent) {
         await sendRestartMessage(sock); // Send restart message when the bot is online
+      restartMessageSent = true; // Set flag to true to prevent further messages
     }
 
     if (connection === 'close' && lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut) {
+      restartMessageSent = false; // Reset flag if connection is closed, allowing for future messages
       connectionLogic(); // Reconnect if not logged out
     }
   });
