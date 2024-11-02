@@ -6,6 +6,7 @@ const { DisconnectReason } = require('@whiskeysockets/baileys'); // Add this lin
 const QRCode = require('qrcode');
 const { handleAnimeCommand } = require('./commands/anime');// Import the anime command
 const { isQuotedMessage } = require('./lib/quotedMessageHandler');
+const sendRestartMessage = require('./lib/restartMessage'); // Import your sendRestartMessage function
 
 const app = express();
 const port = process.env.PORT || 10000;
