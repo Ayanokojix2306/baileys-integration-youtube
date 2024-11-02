@@ -5,13 +5,6 @@ const useMongoDBAuthState = require('./mongoAuthState');
 const { DisconnectReason } = require('@whiskeysockets/baileys'); // Add this line
 const QRCode = require('qrcode');
 const { handleAnimeCommand } = require('./commands/anime');// Import the anime command
-const { handleForwardCommand } = require('./commands/forward'); // Import the forward command
-const { handleViewOnceCommand } = require('./commands/vv'); // Import the view-once command
-const { handleQuoteResponderCommand } = require('./commands/quoteResponder');
-const { isQuotedMessage } = require('./lib/quotedMessageHandler');
-const { handleObfuscateCommand } = require('./commands/obfuscate'); // Import obfuscate command
-const { handleDeobfuscateCommand } = require('./commands/deobfuscate'); // Import deobfuscate command
-
 
 const app = express();
 const port = process.env.PORT || 10000;
@@ -61,42 +54,14 @@ console.log("Received message:", JSON.stringify(message, null, 2)); // Log the m
     // Regex for commands
 const isQuoted = isQuotedMessage(message);
     
-    const forwardRegex = /^[.,!]?\s*forward\b/i; // Regex for forward command
-    const animeRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
-const vvRegex = /^[.,!]?\s*vv\b/i;
-    const quoteResponderRegex = /^[.,!]?\s*quote\b/i;
-   const obfuscateRegex = /^[.,!]?\s*encrypt\b/i;
-const deobfuscateRegex = /^[.,!]?\s*decrypt\b/i;
-    // Check for the obfuscate command
-  if (obfuscateRegex.test(text)) {
-    await handleObfuscateCommand(sock, message);
-    return;
-  }
 
-  // Check for the deobfuscate command
-  if (deobfuscateRegex.test(text)) {
-    await handleDeobfuscateCommand(sock, message);
-    return;
-  }
+    const animeRegex = /^[.,!]?\s*anime\b/i; // Regex for anime command
     // Check for the anime command
     if (animeRegex.test(text)) {
         await handleAnimeCommand(sock, message);
         return; // Return after handling forward command
     }
-
-    // Check for the forward command
-    if (forwardRegex.test(text)) {
-        await handleForwardCommand(sock, message);
-        return; // Return after handling anime command
-    }
-    if (vvRegex.test(text)) {
-      await handleViewOnceCommand(sock, message);
-      return;
-    }
-    if (quoteResponderRegex.test(text)) {
-    await handleQuoteResponderCommand(sock, message);
-    return;
-    }
+    
 
     // Check for greeting messages
     if (text.toLowerCase() === 'hi' || text.toLowerCase() === 'hello') {
