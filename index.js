@@ -38,6 +38,10 @@ async function connectionLogic() {
       console.log("qr code sent successfully ✅");
       console.log(JSON.stringify(qrCodeData)); // Add this line to log the QR code dat
     }
+    // Check if the connection is established
+    if (connection === 'open') {
+        await sendRestartMessage(sock); // Send restart message when the bot is online
+    }
 
     if (connection === 'close' && lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut) {
       connectionLogic(); // Reconnect if not logged out
