@@ -45,7 +45,6 @@ let restartMessageSent = false; // Flag to track if the restart message has been
     }
 
     if (connection === 'close' && lastDisconnect?.error?.output?.statusCode !== DisconnectReason.loggedOut) {
-      restartMessageSent = false; // Reset flag if connection is closed, allowing for future messages
       connectionLogic(); // Reconnect if not logged out
     }
   });
